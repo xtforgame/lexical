@@ -14,6 +14,8 @@ import {
   LexicalComposerContext,
 } from '@lexical/react/LexicalComposerContext';
 import {
+  createEditor,
+  CreateEditorArgs,
   EditorThemeClasses,
   Klass,
   LexicalEditor,
@@ -46,68 +48,104 @@ export function LexicalNestedComposer({
 
   const [parentEditor, {getTheme: getParentTheme}] = parentContext;
 
-  const composerContext: [LexicalEditor, LexicalComposerContextType] = useMemo(
-    () => {
-      const composerTheme: EditorThemeClasses | undefined =
-        initialTheme || getParentTheme() || undefined;
+  const composerContext: LexicalComposerContextType = useMemo(() => {
+    const composerTheme: EditorThemeClasses | undefined =
+      initialTheme || getParentTheme() || undefined;
 
-      const context: LexicalComposerContextType = createLexicalComposerContext(
-        parentContext,
-        composerTheme,
-      );
+    const context: LexicalComposerContextType = createLexicalComposerContext(
+      parentContext,
+      composerTheme,
+    );
 
-      if (composerTheme !== undefined) {
-        initialEditor._config.theme = composerTheme;
+    const newEditorNodes = [];
+    for (const registeredNode of initialEditor._nodes.values()) {
+      newEditorNodes.push(registeredNode.klass);
+      const replacement = registeredNode.replaceWithKlass;
+      if (replacement !== null) {
+        newEditorNodes.push(replacement);
       }
+    }
+    const config: CreateEditorArgs = {
+      // disableEvents: ,
+      editorState: initialEditor._editorState,
+      namespace: initialEditor._config.namespace,
+      nodes: newEditorNodes,
+      onError: initialEditor._onError,
+      parentEditor: parentEditor,
+      // editable: initialEditor._editable,
+      theme: initialEditor._config.theme,
+      // html: initialEditor._htmlConversions,
+    };
+    const newEditor = createEditor(config);
+    // node.caption = newEditor;
+    for (const prop in newEditor) {
+      initialEditor[prop] = newEditor[prop];
+    }
+    return [initialEditor, context];
+  }, []);
 
-      initialEditor._parentEditor = parentEditor;
+  // const composerContext: [LexicalEditor, LexicalComposerContextType] = useMemo(
+  //   () => {
+  //     const composerTheme: EditorThemeClasses | undefined =
+  //       initialTheme || getParentTheme() || undefined;
 
-      if (!initialNodes) {
-        const parentNodes = (initialEditor._nodes = new Map(
-          parentEditor._nodes,
-        ));
-        for (const [type, entry] of parentNodes) {
-          initialEditor._nodes.set(type, {
-            exportDOM: entry.exportDOM,
-            klass: entry.klass,
-            replace: entry.replace,
-            replaceWithKlass: entry.replaceWithKlass,
-            transforms: new Set(),
-          });
-        }
-      } else {
-        for (let klass of initialNodes) {
-          let replace = null;
-          let replaceWithKlass = null;
+  //     const context: LexicalComposerContextType = createLexicalComposerContext(
+  //       parentContext,
+  //       composerTheme,
+  //     );
 
-          if (typeof klass !== 'function') {
-            const options = klass;
-            klass = options.replace;
-            replace = options.with;
-            replaceWithKlass = options.withKlass || null;
-          }
-          const registeredKlass = initialEditor._nodes.get(klass.getType());
-          initialEditor._nodes.set(klass.getType(), {
-            exportDOM: registeredKlass ? registeredKlass.exportDOM : undefined,
-            klass,
-            replace,
-            replaceWithKlass,
-            transforms: new Set(),
-          });
-        }
-      }
+  //     if (composerTheme !== undefined) {
+  //       initialEditor._config.theme = composerTheme;
+  //     }
 
-      initialEditor._config.namespace = parentEditor._config.namespace;
+  //     initialEditor._parentEditor = parentEditor;
 
-      initialEditor._editable = parentEditor._editable;
+  //     if (!initialNodes) {
+  //       const parentNodes = (initialEditor._nodes = new Map(
+  //         parentEditor._nodes,
+  //       ));
+  //       for (const [type, entry] of parentNodes) {
+  //         initialEditor._nodes.set(type, {
+  //           exportDOM: entry.exportDOM,
+  //           klass: entry.klass,
+  //           replace: entry.replace,
+  //           replaceWithKlass: entry.replaceWithKlass,
+  //           transforms: new Set(),
+  //         });
+  //       }
+  //     } else {
+  //       for (let klass of initialNodes) {
+  //         let replace = null;
+  //         let replaceWithKlass = null;
 
-      return [initialEditor, context];
-    },
+  //         if (typeof klass !== 'function') {
+  //           const options = klass;
+  //           klass = options.replace;
+  //           replace = options.with;
+  //           replaceWithKlass = options.withKlass || null;
+  //         }
+  //         const registeredKlass = initialEditor._nodes.get(klass.getType());
+  //         initialEditor._nodes.set(klass.getType(), {
+  //           exportDOM: registeredKlass ? registeredKlass.exportDOM : undefined,
+  //           klass,
+  //           replace,
+  //           replaceWithKlass,
+  //           transforms: new Set(),
+  //         });
+  //       }
+  //     }
 
-    // We only do this for init
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  //     initialEditor._config.namespace = parentEditor._config.namespace;
+
+  //     initialEditor._editable = parentEditor._editable;
+
+  //     return [initialEditor, context];
+  //   },
+
+  //   // We only do this for init
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   [],
+  // );
 
   // If collaboration is enabled, make sure we don't render the children until the collaboration subdocument is ready.
   const {isCollabActive, yjsDocMap} = useCollaborationContext();
