@@ -1887,6 +1887,7 @@ function internalResolveSelectionPoint(
   lastPoint: null | PointType,
   editor: LexicalEditor,
 ): null | PointType {
+  debugger;
   let resolvedOffset = offset;
   let resolvedNode: TextNode | LexicalNode | null;
   // If we have selection on an element, we will
@@ -1926,6 +1927,11 @@ function internalResolveSelectionPoint(
         return null;
       }
       if ($isElementNode(resolvedElement)) {
+        resolvedOffset = Math.min(
+          resolvedElement.getChildrenSize(),
+          resolvedOffset,
+        );
+        debugger;
         let child = resolvedElement.getChildAtIndex(resolvedOffset);
         if (
           $isElementNode(child) &&

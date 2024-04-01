@@ -316,6 +316,7 @@ function onDrop(event: DragEvent, editor: LexicalEditor): boolean {
   event.preventDefault();
   if (canDropImage(event)) {
     const range = getDragSelection(event);
+    // debugger;
     node.remove();
     const rangeSelection = $createRangeSelection();
     if (range !== null && range !== undefined) {
