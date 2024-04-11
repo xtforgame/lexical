@@ -1090,18 +1090,17 @@ export class TextNode extends LexicalNode {
 function convertSpanElement(domNode: Node): DOMConversionOutput {
   // domNode is a <span> since we matched it by nodeName
   const span = domNode as HTMLSpanElement;
-  const style = span.style;
-  const fontWeight = style.fontWeight;
   // Google Docs uses span tags + font-weight for bold text
-  const hasBoldFontWeight = fontWeight === '700' || fontWeight === 'bold';
+  const hasBoldFontWeight = span.style.fontWeight === '700';
   // Google Docs uses span tags + text-decoration: line-through for strikethrough text
-  const hasLinethroughTextDecoration = style.textDecoration === 'line-through';
+  const hasLinethroughTextDecoration =
+    span.style.textDecoration === 'line-through';
   // Google Docs uses span tags + font-style for italic text
-  const hasItalicFontStyle = style.fontStyle === 'italic';
+  const hasItalicFontStyle = span.style.fontStyle === 'italic';
   // Google Docs uses span tags + text-decoration: underline for underline text
-  const hasUnderlineTextDecoration = style.textDecoration === 'underline';
+  const hasUnderlineTextDecoration = span.style.textDecoration === 'underline';
   // Google Docs uses span tags + vertical-align to specify subscript and superscript
-  const verticalAlign = style.verticalAlign;
+  const verticalAlign = span.style.verticalAlign;
 
   return {
     forChild: (lexicalNode) => {
