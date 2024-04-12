@@ -10,8 +10,6 @@ import type {TextNode} from '.';
 import type {LexicalEditor} from './LexicalEditor';
 import type {BaseSelection} from './LexicalSelection';
 
-import {IS_FIREFOX} from 'shared/environment';
-
 import {
   $getSelection,
   $isDecoratorNode,
@@ -29,7 +27,6 @@ import {
   getNodeFromDOMNode,
   getWindow,
   internalGetRoot,
-  isFirefoxClipboardEvents,
 } from './LexicalUtils';
 // The time between a text entry event and the mutation observer firing.
 const TEXT_MUTATION_VARIANCE = 100;
@@ -127,7 +124,6 @@ export function $flushMutations(
       const currentEditorState = editor._editorState;
       const blockCursorElement = editor._blockCursorElement;
       let shouldRevertSelection = false;
-      let possibleTextForFirefoxPaste = '';
 
       for (let i = 0; i < mutations.length; i++) {
         const mutation = mutations[i];
@@ -179,15 +175,6 @@ export function $flushMutations(
               (addedDOM.nodeName !== 'BR' ||
                 !isManagedLineBreak(addedDOM, parentDOM, editor))
             ) {
-              if (IS_FIREFOX) {
-                const possibleText =
-                  (addedDOM as HTMLElement).innerText || addedDOM.nodeValue;
-
-                if (possibleText) {
-                  possibleTextForFirefoxPaste += possibleText;
-                }
-              }
-
               parentDOM.removeChild(addedDOM);
             }
           }
@@ -291,10 +278,6 @@ export function $flushMutations(
         if (shouldRevertSelection) {
           selection.dirty = true;
           $setSelection(selection);
-        }
-
-        if (IS_FIREFOX && isFirefoxClipboardEvents(editor)) {
-          selection.insertRawText(possibleTextForFirefoxPaste);
         }
       }
     });

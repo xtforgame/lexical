@@ -1146,15 +1146,6 @@ export function $getAdjacentNode(
   return null;
 }
 
-export function isFirefoxClipboardEvents(editor: LexicalEditor): boolean {
-  const event = getWindow(editor).event;
-  const inputType = event && (event as InputEvent).inputType;
-  return (
-    inputType === 'insertFromPaste' ||
-    inputType === 'insertFromPasteAsQuotation'
-  );
-}
-
 export function dispatchCommand<TCommand extends LexicalCommand<unknown>>(
   editor: LexicalEditor,
   command: TCommand,

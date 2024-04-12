@@ -106,7 +106,6 @@ import {
   isDeleteWordBackward,
   isDeleteWordForward,
   isEscape,
-  isFirefoxClipboardEvents,
   isItalic,
   isLineBreak,
   isModifier,
@@ -523,15 +522,7 @@ function onBeforeInput(event: InputEvent, editor: LexicalEditor): void {
   const targetRange = getTargetRange(event);
 
   // We let the browser do its own thing for composition.
-  if (
-    inputType === 'deleteCompositionText' ||
-    // If we're pasting in FF, we shouldn't get this event
-    // as the `paste` event should have triggered, unless the
-    // user has dom.event.clipboardevents.enabled disabled in
-    // about:config. In that case, we need to process the
-    // pasted content in the DOM mutation phase.
-    (IS_FIREFOX && isFirefoxClipboardEvents(editor))
-  ) {
+  if (inputType === 'deleteCompositionText') {
     return;
   } else if (inputType === 'insertCompositionText') {
     return;
@@ -1078,8 +1069,7 @@ function onKeyDown(event: KeyboardEvent, editor: LexicalEditor): void {
         event.preventDefault();
         dispatchCommand(editor, SELECT_ALL_COMMAND, event);
       }
-      // FF does it well (no need to override behavior)
-    } else if (!IS_FIREFOX && isSelectAll(keyCode, metaKey, ctrlKey)) {
+    } else if (isSelectAll(keyCode, metaKey, ctrlKey)) {
       event.preventDefault();
       dispatchCommand(editor, SELECT_ALL_COMMAND, event);
     }
