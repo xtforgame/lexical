@@ -1160,6 +1160,7 @@ export function dispatchCommand<TCommand extends LexicalCommand<unknown>>(
   command: TCommand,
   payload: CommandPayloadType<TCommand>,
 ): boolean {
+  console.log(command);
   return triggerCommandListeners(editor, command, payload);
 }
 

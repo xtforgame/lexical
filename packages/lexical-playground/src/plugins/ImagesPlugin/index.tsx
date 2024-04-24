@@ -10,6 +10,7 @@ import {$wrapNodeInElement, mergeRegister} from '@lexical/utils';
 import {
   $createParagraphNode,
   $createRangeSelection,
+  $getPreviousSelection,
   $getSelection,
   $insertNodes,
   $isNodeSelection,
@@ -220,11 +221,20 @@ export default function ImagesPlugin({
       editor.registerCommand<InsertImagePayload>(
         INSERT_IMAGE_COMMAND,
         (payload) => {
+          const browserSelection = window.getSelection();
+
+          // console.log(browserSelection);
+
+          // if (browserSelection !== null && browserSelection.type === 'None') {
+          //   $getRoot().app
+          //   return false;
+          // }
+
           const imageNode = $createImageNode(payload);
           $insertNodes([imageNode]);
-          if ($isRootOrShadowRoot(imageNode.getParentOrThrow())) {
-            $wrapNodeInElement(imageNode, $createParagraphNode).selectEnd();
-          }
+          // if ($isRootOrShadowRoot(imageNode.getParentOrThrow())) {
+          //   $wrapNodeInElement(imageNode, $createParagraphNode).selectEnd();
+          // }
 
           return true;
         },

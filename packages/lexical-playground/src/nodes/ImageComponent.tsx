@@ -35,6 +35,7 @@ import {
   CLICK_COMMAND,
   COMMAND_PRIORITY_LOW,
   createCommand,
+  DRAGEND_COMMAND,
   DRAGSTART_COMMAND,
   KEY_BACKSPACE_COMMAND,
   KEY_DELETE_COMMAND,
@@ -263,6 +264,7 @@ export default function ImageComponent({
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
         (_, activeEditor) => {
+          console.log('fired selection');
           activeEditorRef.current = activeEditor;
           return false;
         },
@@ -288,6 +290,25 @@ export default function ImageComponent({
             return true;
           }
           return false;
+        },
+        COMMAND_PRIORITY_LOW,
+      ),
+      editor.registerCommand(
+        DRAGEND_COMMAND,
+        (event) => {
+          const browserSelection = window.getSelection();
+          console.log(browserSelection);
+          if (
+            browserSelection &&
+            (browserSelection.anchorNode == null ||
+              browserSelection.focusNode == null)
+          ) {
+            console.log('fired');
+            event.preventDefault();
+            return true;
+          }
+
+          return true;
         },
         COMMAND_PRIORITY_LOW,
       ),
