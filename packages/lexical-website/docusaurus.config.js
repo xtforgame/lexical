@@ -11,6 +11,7 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 const fs = require('fs-extra');
+const path = require('path');
 const {github: lightCodeTheme, dracula: darkCodeTheme} =
   require('prism-react-renderer').themes;
 const importPlugin = require('remark-import-partial');
@@ -242,6 +243,13 @@ const config = {
   onBrokenMarkdownLinks: 'throw',
   organizationName: 'facebook',
   plugins: [
+    [
+      './plugins/package-docs',
+      {
+        baseDir: path.resolve(__dirname, '..'),
+        targetDir: path.resolve(__dirname, 'docs/packages'),
+      },
+    ],
     './plugins/webpack-buffer',
     ['docusaurus-plugin-typedoc', docusaurusPluginTypedocConfig],
     async function tailwindcss() {

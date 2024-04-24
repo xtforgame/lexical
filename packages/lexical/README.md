@@ -1,3 +1,8 @@
+---
+sidebar_position: 1
+sidebar_label: lexical (core)
+---
+
 # `lexical`
 
 [![See API Documentation](https://lexical.dev/img/see-api-documentation.svg)](https://lexical.dev/docs/api/modules/lexical)
