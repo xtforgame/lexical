@@ -1912,8 +1912,21 @@ function internalResolveSelectionPoint(
     if (childDOM === editor._blockCursorElement) {
       childDOM = childNodes[resolvedOffset + 1];
       hasBlockCursor = true;
-    } else if (editor._blockCursorElement !== null) {
-      resolvedOffset--;
+    } else {
+      if (editor._blockCursorElement !== null) {
+        debugger;
+        const blockCursorElementParent =
+          editor._blockCursorElement.parentElement;
+        if (dom === blockCursorElementParent) {
+          const blockCursorOffset = Array.prototype.indexOf.call(
+            blockCursorElementParent.children,
+            editor._blockCursorElement,
+          );
+          if (offset > blockCursorOffset) {
+            resolvedOffset--;
+          }
+        }
+      }
     }
     resolvedNode = getNodeFromDOM(childDOM);
 
@@ -1924,6 +1937,9 @@ function internalResolveSelectionPoint(
       // Ensure resolvedElement is actually a element.
       if (resolvedElement === null) {
         return null;
+      }
+      if (resolvedOffset === -1) {
+        // debugger;
       }
       if ($isElementNode(resolvedElement)) {
         resolvedOffset = Math.min(
