@@ -25,7 +25,7 @@ export default function selectionAlwaysOnDisplay(
       editorRootElement !== null &&
       editorRootElement.contains(domAnchorNode);
 
-    if (isSelectionInsideEditor) {
+    if (false) {
       if (removeSelectionMark !== null) {
         removeSelectionMark();
         removeSelectionMark = null;
