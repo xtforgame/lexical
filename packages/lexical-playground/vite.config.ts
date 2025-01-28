@@ -10,6 +10,7 @@ import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import react from '@vitejs/plugin-react';
 import {createRequire} from 'node:module';
+import path from 'node:path';
 import {defineConfig} from 'vite';
 import {replaceCodePlugin} from 'vite-plugin-replace';
 
@@ -54,7 +55,9 @@ export default defineConfig(({command}) => {
       }),
     ],
     resolve: {
-      alias: moduleResolution(command === 'serve' ? 'source' : 'development'),
+      alias: {
+        'shared': path.resolve('..', 'shared/src'),
+      },
     },
   };
 });

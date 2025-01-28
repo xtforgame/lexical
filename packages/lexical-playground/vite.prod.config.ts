@@ -9,6 +9,7 @@
 import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import react from '@vitejs/plugin-react';
+import path from 'node:path';
 import {defineConfig} from 'vite';
 import {replaceCodePlugin} from 'vite-plugin-replace';
 
@@ -55,6 +56,8 @@ export default defineConfig({
     }),
   ],
   resolve: {
-    alias: moduleResolution('production'),
+    alias: {
+      'shared': path.resolve('..', 'shared/src'),
+    },
   },
 });
