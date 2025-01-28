@@ -14,6 +14,7 @@
     "@excalidraw/excalidraw": "^0.17.0",
     "@lexical/clipboard": "0.23.1",
     "@lexical/code": "0.23.1",
+    "@lexical/devtools-core": "0.23.1",
     "@lexical/file": "0.23.1",
     "@lexical/hashtag": "0.23.1",
     "@lexical/link": "0.23.1",
@@ -39,9 +40,9 @@
   "devDependencies": {
     "@babel/plugin-transform-flow-strip-types": "^7.24.7",
     "@babel/preset-react": "^7.24.7",
+    "@lexical/eslint-plugin": "0.23.1",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^25.0.7",
-    "@lexical/eslint-plugin": "0.23.1",
     "@types/lodash-es": "^4.14.182",
     "@vitejs/plugin-react": "^4.2.1",
     "rollup-plugin-copy": "^3.5.0",

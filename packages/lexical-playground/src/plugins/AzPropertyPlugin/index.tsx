@@ -6,6 +6,7 @@
  *
  */
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
+import { useLexicalCommandsLog } from '@lexical/devtools-core';
 import {$wrapNodeInElement, mergeRegister} from '@lexical/utils';
 import {
   $createParagraphNode,
@@ -208,6 +209,8 @@ export default function AzPropertyPlugin({
   captionsEnabled?: boolean;
 }): JSX.Element | null {
   const [editor] = useLexicalComposerContext();
+  const logs = useLexicalCommandsLog(editor);
+  console.log('logs :', logs);
 
   useEffect(() => {
     if (!editor.hasNodes([AzPropertyNode])) {
