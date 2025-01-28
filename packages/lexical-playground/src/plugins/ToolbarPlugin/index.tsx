@@ -49,7 +49,13 @@ import {
   REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
+  INSERT_PARAGRAPH_COMMAND,
+  DELETE_CHARACTER_COMMAND,
+  CONTROLLED_TEXT_INSERTION_COMMAND,
 } from 'lexical';
+import {
+  INSERT_TABLE_COMMAND,
+} from '@lexical/table';
 import {Dispatch, useCallback, useEffect, useState} from 'react';
 import * as React from 'react';
 import {IS_APPLE} from 'shared/environment';
@@ -74,6 +80,11 @@ import {
   InsertImageDialog,
   InsertImagePayload,
 } from '../ImagesPlugin';
+import {
+  INSERT_AZ_PROPERTY_COMMAND,
+  InsertAzPropertyDialog,
+  InsertAzPropertyPayload,
+} from '../AzPropertyPlugin';
 import {InsertInlineImageDialog} from '../InlineImagePlugin';
 import InsertLayoutDialog from '../LayoutPlugin/InsertLayoutDialog';
 import {INSERT_PAGE_BREAK} from '../PageBreakPlugin';
@@ -665,6 +676,48 @@ export default function ToolbarPlugin({
         },
         COMMAND_PRIORITY_CRITICAL,
       ),
+      // activeEditor.registerUpdateListener(({ editorState }) => {
+      //   editorState.read(() => {
+      //     const root = $getNodeByKey("root");
+      //     if (!root) return;
+      //     console.log('root :', root);
+      //   });
+      // }),
+      // activeEditor.registerCommand(
+      //   INSERT_PARAGRAPH_COMMAND,
+      //   (payload) => {
+      //     return true;
+      //   },
+      //   COMMAND_PRIORITY_CRITICAL
+      // ),
+      // activeEditor.registerCommand(
+      //   DELETE_CHARACTER_COMMAND,
+      //   (payload) => {
+      //     return true;
+      //   },
+      //   COMMAND_PRIORITY_CRITICAL
+      // ),
+      // activeEditor.registerCommand(
+      //   CONTROLLED_TEXT_INSERTION_COMMAND,
+      //   (payload) => {
+      //     return true;
+      //   },
+      //   COMMAND_PRIORITY_CRITICAL
+      // ),
+      // activeEditor.registerCommand(
+      //   INSERT_IMAGE_COMMAND,
+      //   (payload) => {
+      //     return true;
+      //   },
+      //   COMMAND_PRIORITY_CRITICAL
+      // ),
+      // activeEditor.registerCommand(
+      //   INSERT_TABLE_COMMAND,
+      //   (payload) => {
+      //     return true;
+      //   },
+      //   COMMAND_PRIORITY_CRITICAL
+      // ),
     );
   }, [$updateToolbar, activeEditor, editor, updateToolbarState]);
 
@@ -1021,6 +1074,17 @@ export default function ToolbarPlugin({
                 </DropDownItem>
                 <DropDownItem
                   onClick={() => {
+                    activeEditor.dispatchCommand(
+                      INSERT_HORIZONTAL_RULE_COMMAND,
+                      undefined,
+                    );
+                  }}
+                  className="item">
+                  <i className="icon horizontal-rule" />
+                  <span className="text">Horizontal Rule</span>
+                </DropDownItem>
+                <DropDownItem
+                  onClick={() => {
                     activeEditor.dispatchCommand(INSERT_PAGE_BREAK, undefined);
                   }}
                   className="item">
@@ -1039,6 +1103,19 @@ export default function ToolbarPlugin({
                   className="item">
                   <i className="icon image" />
                   <span className="text">Image</span>
+                </DropDownItem>
+                <DropDownItem
+                  onClick={() => {
+                    showModal('Insert AzProperty', (onClose) => (
+                      <InsertAzPropertyDialog
+                        activeEditor={activeEditor}
+                        onClose={onClose}
+                      />
+                    ));
+                  }}
+                  className="item">
+                  <i className="icon image" />
+                  <span className="text">AzProperty</span>
                 </DropDownItem>
                 <DropDownItem
                   onClick={() => {

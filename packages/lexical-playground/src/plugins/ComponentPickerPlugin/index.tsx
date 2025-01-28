@@ -42,6 +42,7 @@ import {INSERT_COLLAPSIBLE_COMMAND} from '../CollapsiblePlugin';
 import {InsertEquationDialog} from '../EquationsPlugin';
 import {INSERT_EXCALIDRAW_COMMAND} from '../ExcalidrawPlugin';
 import {INSERT_IMAGE_COMMAND, InsertImageDialog} from '../ImagesPlugin';
+import {INSERT_AZ_PROPERTY_COMMAND, InsertAzPropertyDialog} from '../AzPropertyPlugin';
 import InsertLayoutDialog from '../LayoutPlugin/InsertLayoutDialog';
 import {INSERT_PAGE_BREAK} from '../PageBreakPlugin';
 import {InsertPollDialog} from '../PollPlugin';
@@ -285,6 +286,14 @@ function getBaseOptions(editor: LexicalEditor, showModal: ShowModal) {
       onSelect: () =>
         showModal('Insert Image', (onClose) => (
           <InsertImageDialog activeEditor={editor} onClose={onClose} />
+        )),
+    }),
+    new ComponentPickerOption('AzProperty', {
+      icon: <i className="icon image" />,
+      keywords: ['az-property'],
+      onSelect: () =>
+        showModal('Insert AzProperty', (onClose) => (
+          <InsertAzPropertyDialog activeEditor={editor} onClose={onClose} />
         )),
     }),
     new ComponentPickerOption('Collapsible', {
